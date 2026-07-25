@@ -123,4 +123,13 @@ difference is year-over-year course variation, worth an eyeball but not a bug.)
 - If a future round's PDF uses a different layout, the classifiers to revisit are
   at the top of `src/extractor.py` (`RE_INST`, `RE_COURSE`, `_is_merit`,
   `_is_pct`, `_is_header_material`).
-```
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for dev setup, how to validate a run, and
+the current open items to verify (including the 2025-vs-last-year branch-count
+delta).
+
+## License
+
+[MIT](LICENSE) © SeaOfTiberias
