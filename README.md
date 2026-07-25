@@ -124,6 +124,13 @@ difference is year-over-year course variation, worth an eyeball but not a bug.)
   at the top of `src/extractor.py` (`RE_INST`, `RE_COURSE`, `_is_merit`,
   `_is_pct`, `_is_header_material`).
 
+## Further reading
+
+- [docs/PROJECT_STATE.md](docs/PROJECT_STATE.md) — current extraction state,
+  what's pending, design decisions worth knowing.
+- [docs/PDF_LAYOUT.md](docs/PDF_LAYOUT.md) — MSCET PDF structural facts and
+  parser gotchas; the reference for anyone touching `src/extractor.py`.
+
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for dev setup, how to validate a run, and
