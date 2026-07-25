@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+
+# Large data files (regenerable or source data — kept out of the repo)
+# source cut-off PDFs
+data/input_pdfs/*.pdf
+# generated workbook + JSON
+data/output/
+# last year's reference workbook (8.7 MB)
+all_colleges_cutoff.xlsx
+
+# Keep the folder skeletons
+!data/input_pdfs/.gitkeep
+!data/output/.gitkeep
+
+# Local Claude Code settings (machine-specific)
+.claude/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
