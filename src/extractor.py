@@ -90,19 +90,32 @@ def _lines(page):
     """
     Return [(top, [words])] for a page, one entry per visual line.
 
-    Words are bucketed by their rounded ``top`` coordinate. The literal word
-    "Stage" (which sits on its own baseline between the header and the merit
-    row) is dropped so it never contaminates a line.
+    Words are bucketed by their rounded ``top`` coordinate. Two subtleties:
+
+    * The literal word "Stage" sits on its own baseline between the header and
+      the merit row -- we drop it so it can never contaminate a line.
+    * pdfplumber sometimes places the leading Roman numeral of a merit row
+      (``I``, ``II``, ...) on a baseline 1-2px offset from the merit numbers
+      themselves. We fuse adjacent tops within ``JITTER_PX`` to reunite them
+      -- safe because "Stage" is already removed and true data-row separations
+      in these PDFs are >=6px apart.
     """
+    JITTER_PX = 2
     rows = defaultdict(list)
     for w in page.extract_words():
+        if w["text"] == "Stage":
+            continue
         rows[round(w["top"])].append(w)
-    out = []
+
+    merged: list[list] = []      # each entry: [top, [words]]
     for top in sorted(rows):
-        ws = [w for w in rows[top] if w["text"] != "Stage"]
-        if ws:
-            out.append((top, sorted(ws, key=lambda w: w["x0"])))
-    return out
+        if merged and top - merged[-1][0] <= JITTER_PX:
+            merged[-1][1].extend(rows[top])
+            merged[-1][0] = top
+        else:
+            merged.append([top, list(rows[top])])
+
+    return [(t, sorted(ws, key=lambda w: w["x0"])) for t, ws in merged]
 
 
 def _text(ws):
