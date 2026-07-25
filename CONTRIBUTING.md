@@ -40,25 +40,32 @@ After a full run, sanity-check `data/output/extracted_cutoffs.json`:
 
 ## Known items to verify
 
-### 1. Round-1 branch count is lower than last year (needs confirmation)
+### 1. Round-1 coverage vs. last year
 
-On the 2025 CAP Round-1 PDF the extractor produces:
+On the 2025 CAP Round-1 PDF the extractor now produces:
 
 | Metric   | 2025 (extracted) | Last year (R1) |
 |----------|-----------------:|---------------:|
-| Records  | 31,656           | 32,156         |
+| Records  | 34,422           | 32,156         |
 | Colleges | 368              | 367            |
-| Branches | 1,994            | 2,100          |
+| Branches | 2,140            | 2,100          |
 
-College count matches almost exactly and there are **no null/malformed rows**,
-so this is most likely genuine year-over-year course variation (branches with no
-Round-1 allotment, NEP-driven consolidation, discontinued programs). It has
-**not** been confirmed against an authoritative 2025 branch list.
+Branch count is slightly *above* last year, consistent with the new SEBC / PwD
+category variants introduced in 2025. Zero nulls, zero out-of-range percentiles.
 
-**To close this:** cross-check the ~106 branch delta against the official DTE /
-CET Cell branch master for 2025-26. If any missing branches *do* appear in the
-PDF but not in the output, capture the college code + branch code and the raw
-PDF page so the parser gap can be reproduced and fixed.
+Coverage looks good but has **not** been reconciled row-for-row against the
+authoritative DTE / CET Cell branch master for 2025-26. Spot-check any specific
+(college, course) you care about; if a block that appears in the PDF is missing
+from the output, capture the college code + branch code + PDF page number so
+the parser gap can be reproduced.
+
+**Historical note:** the initial parser under-counted at 31,656 rows / 1,994
+branches because pdfplumber sometimes places the leading stage numeral (`I` /
+`II`) on a baseline 1-2 px offset from its merit row, causing `_is_merit()` to
+drop the merit line. Concrete misses included Amravati CSE (0 rows) and
+Instrumentation (1 row). Fixed in commit `a13f4d2` by clustering line-tops
+within ±2 px in `_lines()`. Worth being aware of if a future round's PDF
+regresses this behaviour with a different offset.
 
 ### 2. Same-suffix category across seat-type bands
 
